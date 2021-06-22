@@ -116,6 +116,11 @@ int  xdp_parser_func(struct xdp_md *ctx)
 	 */
 	nh_type = parse_ethhdr(&nh, data_end, &eth);
 
+	// ALDS: Turn the condition below into a side exit.
+	if (nh_type != bpf_htons(ETH_P_IPV6)) {
+		goto out;
+	}
+
 	if (nh_type == bpf_htons(ETH_P_IPV6)) {
 		struct ipv6hdr *ip6h;
 		struct icmp6hdr *icmp6h;
